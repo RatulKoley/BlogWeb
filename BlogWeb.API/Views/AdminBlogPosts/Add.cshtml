@@ -13,22 +13,22 @@
 
         <div class="mb-3">
             <label class="form-label">Heading</label>
-            <input type="text" class="form-control" id="heading" asp-for="BlogPostInfo.Heading" />
+            <input type="text" class="form-control" id="heading" asp-for="blogPostInfo.Heading" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Page Title</label>
-            <input type="text" class="form-control" id="pageTitle" asp-for="BlogPostInfo.PageTitle" />
+            <input type="text" class="form-control" id="pageTitle" asp-for="blogPostInfo.PageTitle" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Content</label>
-            <textarea class="form-control" id="content" asp-for="BlogPostInfo.Content"></textarea>
+            <textarea class="form-control" id="content" asp-for="blogPostInfo.Content"></textarea>
         </div>
 
         <div class="mb-3">
             <label class="form-label">Short Description</label>
-            <input type="text" class="form-control" id="shortDescription" asp-for="BlogPostInfo.ShortDescription" />
+            <input type="text" class="form-control" id="shortDescription" asp-for="blogPostInfo.ShortDescription" />
         </div>
 
         <div class="mb-3">
@@ -40,38 +40,38 @@
 
         <div class="mb-3">
             <label class="form-label">Featured Image URL</label>
-            <input type="text" class="form-control" id="featuredImageUrl" asp-for="BlogPostInfo.FeaturedImageUrl" />
+            <input type="text" class="form-control" id="featuredImageUrl" asp-for="blogPostInfo.FeaturedImageUrl" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">URL Handle</label>
-            <input type="text" class="form-control" id="urlHandle" asp-for="BlogPostInfo.UrlHandle" />
+            <input type="text" class="form-control" id="urlHandle" asp-for="blogPostInfo.UrlHandle" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Published Date</label>
-            <input type="date" class="form-control" id="publishedDate" asp-for="BlogPostInfo.PublishedDate" />
+            <input type="date" class="form-control" id="publishedDate" asp-for="blogPostInfo.PublishedDate" />
         </div>
 
         <div class="mb-3">
             <label class="form-label">Author</label>
-            <input type="text" class="form-control" id="author" asp-for="BlogPostInfo.Author" />
+            <input type="text" class="form-control" id="author" asp-for="blogPostInfo.Author" />
         </div>
 
         <div class="form-check mb-3">
-            <input class="form-check-input" type="checkbox" id="visible" asp-for="BlogPostInfo.Visible">
+            <input class="form-check-input" type="checkbox" id="visible" asp-for="blogPostInfo.Visible">
             <label class="form-check-label">
                 Is Visible?
             </label>
         </div>
 
-        @* <div class="mb-3">
+        <div class="mb-3">
             <label class="form-label">Tags</label>
             <select class="form-select"
-                    asp-items="@Model.BlogPostInfo.Tags"
+                    asp-items="@Model.Tags"
                     asp-for="SelectedTags">
             </select>
-        </div> *@
+        </div>
 
 
         <div class="mb-3">

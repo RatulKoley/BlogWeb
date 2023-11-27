@@ -7,6 +7,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BlogWeb.API.styles.css" asp-append-version="true" />
+    <link href='https://cdn.jsdelivr.net/npm/froala-editor@latest/css/froala_editor.pkgd.min.css' rel='stylesheet' type='text/css' />
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/froala-editor@latest/js/froala_editor.pkgd.min.js'></script>
 </head>
 <body>
     <header>
@@ -30,6 +32,7 @@
                                 <li><a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="Add">Add Tag</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="List">Show Tags</a></li>
                                 <li><a class="dropdown-item" asp-area="" asp-controller="AdminBlogPosts" asp-action="Add">Add Blogs</a></li>
+                                <li><a class="dropdown-item" asp-area="" asp-controller="AdminBlogPosts" asp-action="List">All Blogs</a></li>
                             </ul>
                         </li>
                     </ul>
