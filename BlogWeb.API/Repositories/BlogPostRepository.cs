@@ -73,5 +73,15 @@ namespace BlogWeb.API.Repositories
                 return result;
             return null;
         }
+
+        public async Task<BlogPost?> GetAsync(string urlHandle)
+        {
+            var result = await dbcon.BlogPosts
+                .Include(_ => _.Tags)
+                .FirstOrDefaultAsync(_ => _.UrlHandle == urlHandle);
+            if (result != null)
+                return result;
+            return null;
+        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using BlogWeb.API.Models;
+using BlogWeb.API.Models.ViewModels;
+using BlogWeb.API.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -7,15 +9,33 @@ namespace BlogWeb.API.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IBlogPostRepository blogrepo;
+        private readonly ITagRepository tagrepo;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IBlogPostRepository blogrepo, ITagRepository tagrepo)
         {
             _logger = logger;
+            this.blogrepo = blogrepo;
+            this.tagrepo = tagrepo;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var blogposts = await blogrepo.GetAllAsync();
+            var tags = await tagrepo.GetAllAsync();
+            HomeViewModel objModel = new();
+            objModel.BlogPostList = blogposts.ToList();
+            objModel.TagList = tags.ToList();
+            return View(objModel);
+        }
+        public async Task<IActionResult> Details(string urlHandle)
+        {
+            var result = await blogrepo.GetAsync(urlHandle);
+            if (result != null)
+            {
+                return View(result);
+            }
+            return RedirectToAction("Index");
         }
 
         public IActionResult Privacy()
