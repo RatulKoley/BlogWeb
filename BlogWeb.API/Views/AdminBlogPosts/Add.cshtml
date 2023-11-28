@@ -34,7 +34,6 @@
         <div class="mb-3">
             <label class="form-label">Featured Image Upload</label>
             <input type="file" id="featuredImageUpload" class="form-control" />
-
             <img src="" id="featuredImageDisplay" style="display:none;width: 300px;" />
         </div>
 
@@ -83,12 +82,10 @@
 
     </form>
 </div>
-
-
 @section Scripts {
     <script>
         var editor = new FroalaEditor('#content', {
-            imageUploadURL: '/api/images'
+            imageUploadURL: '/api/image'
         });
 
 
@@ -103,7 +100,7 @@
             let data = new FormData();
             data.append('file', e.target.files[0]);
 
-            await fetch('/api/images', {
+            await fetch('/api/image', {
                 method: 'POST',
                 headers: {
                     'Aceept': '*/*',
@@ -122,3 +119,4 @@
 
     </script>
 }
+
