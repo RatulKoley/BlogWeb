@@ -1,12 +1,11 @@
-﻿using BlogWeb.API.Data;
-using BlogWeb.API.Models.Domains;
-using BlogWeb.API.Models.ViewModels;
+﻿using BlogWeb.API.Models.ViewModels;
 using BlogWeb.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace BlogWeb.API.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class AdminTagsController : Controller
     {
         private readonly ITagRepository tagrepo;
@@ -23,7 +22,7 @@ namespace BlogWeb.API.Controllers
         public async Task<IActionResult> Add(TagViewModel objModel)
         {
             await tagrepo.AddAsync(objModel.TagInfo);
-            return RedirectToAction ("List")  ;
+            return RedirectToAction("List");
         }
         [HttpGet]
         [ActionName("List")]
@@ -35,8 +34,8 @@ namespace BlogWeb.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            TagViewModel objModel = new(){ TagInfo = null };
-            var result =  await tagrepo.GetAsync(id);
+            TagViewModel objModel = new() { TagInfo = null };
+            var result = await tagrepo.GetAsync(id);
             if (result != null)
             {
                 objModel.TagInfo = result;
@@ -48,7 +47,7 @@ namespace BlogWeb.API.Controllers
         public async Task<IActionResult> Edit(TagViewModel objModel)
         {
             var result = await tagrepo.EditAsync(objModel.TagInfo);
-            if(result!= null)
+            if (result != null)
                 return RedirectToAction("List");
             return RedirectToAction("Edit", new { id = objModel.TagInfo.Id });
         }

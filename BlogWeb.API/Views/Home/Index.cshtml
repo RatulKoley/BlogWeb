@@ -1,8 +1,81 @@
-﻿@{
+﻿@model BlogWeb.API.Models.ViewModels.HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container col-xxl-12 px-4 py-5" style="background-image: url('https://images.pexels.com/photos/1353938/pexels-photo-1353938.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'); background-size: cover; background-position: center; height: 400px; display: flex; align-items: center; justify-content: center; color: #333; text-align: center;">
+    <div>
+        <h1 class="display-4 fw-bold lh-1 mb-3" style="font-size:70px;">
+            Ratul Koley - Dev Blogs
+        </h1>
+        <p class="lead" style="font-size:18px; font-weight:500; margin-top:30px;">
+            Dive Into The World Of Dev Blogs, Where Passion For Programming Meets Wealth Of Knowledge. As Seasoned Developer & Tech Enthusiast, I Share My Insights & Experiences To Inspire & Guide Fellow Developers On Their Journey.
+            Explore Diverse Range Of Articles & Tutorials, Each Crafted To Provide Valuable Insights & Perspectives On Ever-Evolving Landscapes Of Software Development.
+        </p>
+    </div>
 </div>
+<div class="container">
+    <div class="row justify-content-center" style="margin-bottom:20px; margin-top:20px;">
+        <div class="col-12 d-flex justify-content-center">
+            @if (Model != null && Model.TagList.Any())
+            {
+                foreach (var tag in Model.TagList)
+                {
+                    <span class="badge bg-dark me-1" style="margin-left:10px;" >
+                        @tag.Name
+                    </span>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    @if (Model != null && Model.BlogPostList.Any())
+    {
+        @for (int i = 0; i < Model.BlogPostList.Count; i += 2)
+        {
+            <div class="row justify-content-center mb-5">
+                @for (int j = i; j < i + 2 && j < Model.BlogPostList.Count; j++)
+                {
+                    var blogPost = Model.BlogPostList[j];
+                    <div class="col-md-6">
+                        <div class="bg-light box-shadow p-5" style="border-radius:20px;">
+                            <img src="@blogPost.FeaturedImageUrl" alt="@blogPost.Heading" class="mb-2 d-block img-fluid" />
+                            <h2 class="mb-4">@blogPost.Heading</h2>
+                            <p class="mb-4">
+                                Author: @blogPost.Author
+                                <br />
+                                Published Date: @blogPost.PublishedDate.ToShortDateString()
+                            </p>
+
+                            <p class="mb-4">
+                                @foreach (var tag in blogPost.Tags)
+                                {
+                                    <span class="badge bg-secondary me-1">@tag.Name</span>
+                                }
+                            </p>
+
+                            <p class="mb-4" style="max-height: 5em; 
+                                        overflow: hidden;
+                                        text-overflow: ellipsis;
+                                        display: -webkit-box;
+                                        -webkit-line-clamp: 3;
+                                        -webkit-box-orient: vertical;
+                             ">@blogPost.ShortDescription</p>
+
+                            <a class="btn btn-dark"
+                               asp-area=""
+                               asp-controller="Home"
+                               asp-action="Details"
+                               asp-route-urlHandle="@blogPost.UrlHandle">Read More</a>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    }
+</div>
+
+
+
+
