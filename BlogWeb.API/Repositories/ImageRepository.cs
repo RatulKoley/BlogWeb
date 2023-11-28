@@ -19,7 +19,7 @@ namespace BlogWeb.API.Repositories
         public async Task<string> UploadAsync(IFormFile file)
         {
             Cloudinary client = new(account);
-            var uploadParams = new ImageUploadParams()
+            ImageUploadParams uploadParams = new()
             {
                 File = new FileDescription(file.FileName, file.OpenReadStream()),
                 DisplayName = file.FileName

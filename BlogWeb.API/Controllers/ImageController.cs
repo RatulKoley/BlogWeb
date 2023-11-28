@@ -15,9 +15,10 @@ namespace BlogWeb.API.Controllers
         {
             this.imagerepo = imagerepo;
         }
-        public async Task<ActionResult> UploadAsync(IFormFile formFile, string imagePath)
+        [HttpPost]
+        public async Task<ActionResult> UploadAsync(IFormFile file)
         {
-            var result = await imagerepo.UploadAsync(formFile);
+            var result = await imagerepo.UploadAsync(file);
             if (result == null)
             {
                 return Problem("Image Upload Unsuccessfull", null, (int)HttpStatusCode.InternalServerError);

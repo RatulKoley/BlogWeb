@@ -114,7 +114,7 @@
 @section Scripts {
     <script>
         var editor = new FroalaEditor('#content', {
-            imageUploadURL: '/api/images'
+            imageUploadURL: '/api/image'
         });
 
 
@@ -129,7 +129,7 @@
             let data = new FormData();
             data.append('file', e.target.files[0]);
 
-            await fetch('/api/images', {
+            await fetch('/api/image', {
                 method: 'POST',
                 headers: {
                     'Aceept': '*/*',
