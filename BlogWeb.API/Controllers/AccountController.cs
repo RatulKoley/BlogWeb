@@ -1,5 +1,6 @@
 ﻿using BlogWeb.API.Models.ViewModels;
 using BlogWeb.API.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BlogWeb.API.Controllers
@@ -57,6 +58,21 @@ namespace BlogWeb.API.Controllers
         public IActionResult AccessDenied()
         {
             return View(); ;
+        }
+        [Authorize(Roles = "SuperAdmin")]
+        public IActionResult RegisterAdmin()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> RegisterAdmin(RegisterViewModel objModel)
+        {
+            var result = await accountrepo.RegisterAdmin(objModel);
+            if (result.SuccessMassage != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
         }
 
     }
