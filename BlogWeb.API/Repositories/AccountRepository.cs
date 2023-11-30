@@ -79,6 +79,18 @@ namespace BlogWeb.API.Repositories
             return objModel;
         }
 
+        //User Repositories
+        public async Task<IEnumerable<IdentityUser>> GetAll()
+        {
+            var result = await authdbcon.Users.ToListAsync();
+            var SuperUser = result
+                .FirstOrDefault(_ => _.Email == "SuperAdmin@gmail.com");
+            if (SuperUser != null)
+            {
+                result.Remove(SuperUser);
+            }
+            return result;
+        }
         public async Task<UserListViewModel> RegisterUser(UserListViewModel objModel)
         {
             IdentityUser newUser = new()
@@ -100,16 +112,49 @@ namespace BlogWeb.API.Repositories
             return objModel;
         }
 
-        public async Task<IEnumerable<IdentityUser>> GetAll()
+        public async Task<UserListViewModel?> GetUser(Guid Id)
         {
-            var result = await authdbcon.Users.ToListAsync();
-            var SuperUser = result
-                .FirstOrDefault(_ => _.Email == "SuperAdmin@gmail.com");
-            if (SuperUser != null)
+            UserListViewModel returnModel = new();
+            returnModel.newUserInfo = new();
+            returnModel.newUserInfo.newRegister = new();
+            var FindUser = await _userManager.FindByIdAsync(Id.ToString());
+            if (FindUser != null)
             {
-                result.Remove(SuperUser);
+                returnModel.newUserInfo.newRegister.UserId = FindUser.Id;
+                returnModel.newUserInfo.newRegister.UserName = FindUser.UserName;
+                returnModel.newUserInfo.newRegister.Email = FindUser.Email;
+
+                if (await _userManager.IsInRoleAsync(FindUser, "Admin"))
+                    returnModel.newUserInfo.isAdmin = true;
+                else
+                    returnModel.newUserInfo.isAdmin = false;
+                return returnModel;
             }
-            return result;
+            return null;
+        }
+
+        public async Task<UserListViewModel?> EditUser(UserListViewModel objModel)
+        {
+            var FindUser = await _userManager.FindByIdAsync(objModel.newUserInfo.newRegister.UserId);
+            if (FindUser != null)
+            {
+                FindUser.UserName = objModel.newUserInfo.newRegister.UserName;
+                FindUser.Email = objModel.newUserInfo.newRegister.Email;
+                await _userManager.UpdateAsync(FindUser);
+                return objModel;
+            }
+            return null;
+        }
+
+        public async Task<string?> DeleteUser(Guid Id)
+        {
+            var FindUser = await _userManager.FindByIdAsync(Id.ToString());
+            if (FindUser != null)
+            {
+                await _userManager.DeleteAsync(FindUser);
+                return "User Deleted";
+            }
+            return null;
         }
     }
 }

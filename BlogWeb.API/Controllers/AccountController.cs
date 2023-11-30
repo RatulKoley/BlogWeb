@@ -19,10 +19,13 @@ namespace BlogWeb.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel objModel)
         {
-            var result = await accountrepo.Register(objModel);
-            if (result.SuccessMassage != null)
+            if (ModelState.IsValid)
             {
-                return RedirectToAction("Login");
+                var result = await accountrepo.Register(objModel);
+                if (result.SuccessMassage != null)
+                {
+                    return RedirectToAction("Login");
+                }
             }
             return View();
         }
@@ -37,14 +40,17 @@ namespace BlogWeb.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel objModel)
         {
-            var result = await accountrepo.Login(objModel);
-            if (result.SuccessMsg != null)
+            if (ModelState.IsValid)
             {
-                if (!string.IsNullOrWhiteSpace(objModel.ReturnUrl))
+                var result = await accountrepo.Login(objModel);
+                if (result.SuccessMsg != null)
                 {
-                    return Redirect(objModel.ReturnUrl);
+                    if (!string.IsNullOrWhiteSpace(objModel.ReturnUrl))
+                    {
+                        return Redirect(objModel.ReturnUrl);
+                    }
+                    return RedirectToAction("Index", "Home");
                 }
-                return RedirectToAction("Index", "Home");
             }
             return View();
         }
@@ -73,6 +79,60 @@ namespace BlogWeb.API.Controllers
                 return RedirectToAction("Index", "Home");
             }
             return View();
+        }
+
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> UserList()
+        {
+            var users = await accountrepo.GetAll();
+            UserListViewModel NewModel = new();
+            NewModel.UserList = new();
+            foreach (var user in users)
+            {
+                UserModel newEntry = new()
+                {
+                    Id = Guid.Parse(user.Id),
+                    UserName = user.UserName,
+                    EmailAddress = user.Email
+                };
+                NewModel.UserList.Add(newEntry);
+            }
+            return View(NewModel);
+        }
+        [HttpPost]
+        public async Task<IActionResult> UserList(UserListViewModel objModel)
+        {
+            await accountrepo.RegisterUser(objModel);
+            return RedirectToAction("UserList");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(Guid Id)
+        {
+            await accountrepo.DeleteUser(Id);
+            return RedirectToAction("UserList");
+        }
+        public async Task<IActionResult> Edit(Guid Id)
+        {
+            UserListViewModel objModel = new();
+            var result = await accountrepo.GetUser(Id);
+            if (result != null)
+            {
+                objModel = result;
+                return View(objModel);
+            }
+            return View(null);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Edit(UserListViewModel objModel)
+        {
+            await accountrepo.EditUser(objModel);
+            if (objModel != null)
+            {
+                return RedirectToAction("UserList");
+            }
+            return View();
+
         }
 
     }
