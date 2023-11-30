@@ -9,6 +9,8 @@ namespace BlogWeb.API.Data
 
         public virtual DbSet<BlogPost> BlogPosts { get; set; }
         public virtual DbSet<Tag> Tags { get; set; }
+        public virtual DbSet<BlogPostComment> BlogPostComments { get; set; }
+        public virtual DbSet<BlogPostLike> BlogPostLikes { get; set; }
 
 
 

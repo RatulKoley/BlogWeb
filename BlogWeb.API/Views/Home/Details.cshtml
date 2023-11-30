@@ -1,7 +1,10 @@
-﻿@model BlogWeb.API.Models.Domains.BlogPost
+﻿@model BlogWeb.API.Models.ViewModels.BlogPostsDetailsViewModel
 @{
-    ViewData["Title"] = Model.PageTitle;
+    ViewData["Title"] = Model.BlogPostInfo.PageTitle;
 }
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> signinManager
+@inject UserManager<IdentityUser> userManager
 
 
 <div class="container my-5">
@@ -10,52 +13,52 @@
 
             @if (Model != null)
             {
-                <h1 class="mb-3">@Model.Heading</h1>
+                <h1 class="mb-3">@Model.BlogPostInfo.Heading</h1>
 
                 <div class="d-flex justify-content-between mb-3">
-                    <span class="text-secondary">@Model.Author</span>
-                    <span class="text-secondary">@Model.PublishedDate.ToShortDateString()</span>
+                    <span class="text-secondary">@Model.BlogPostInfo.Author</span>
+                    <span class="text-secondary">@Model.BlogPostInfo.PublishedDate.ToShortDateString()</span>
                 </div>
 
-                @* <div class="mb-3">
-                    @if (signInManager.IsSignedIn(User))
+                <div class="mb-3">
+                    @if (signinManager.IsSignedIn(User))
                     {
-                        if (Model.Liked)
+                         if (Model.IsLiked)
                         {
                             <a style="cursor: pointer;">
                                 <i class="bi bi-hand-thumbs-up-fill"></i>
                             </a>
                         }
                         else
-                        {
+                        { 
                             <a id="btnLike" style="cursor: pointer;">
                                 <i class="bi bi-hand-thumbs-up"></i>
                             </a>
-                        }
+                         } 
                     }
 
                     <span id="totalLikes">@Model.TotalLikes</span> likes
-                </div> *@
+                </div>
 
                 <div class="mb-3 d-flex">
-                    @foreach (var tag in Model.Tags)
+                    @foreach (var tag in Model.BlogPostInfo.Tags)
                     {
                         <span class="badge bg-secondary me-1">@tag.Name</span>
                     }
                 </div>
 
-                <img src="@Model.FeaturedImageUrl" class="d-block img-fluid mb-3" />
+                <img src="@Model.BlogPostInfo.FeaturedImageUrl" class="d-block img-fluid mb-3" />
 
                 <div class="mb-3 blog-details-content">
-                    @Html.Raw(Model.Content)
+                    @Html.Raw(Model.BlogPostInfo.Content)
                 </div>
 
 
-                @* <div class="card">
+                 <div class="card">
                     <div class="card-header">
                         <h5>Comments</h5>
 
-                        @if (signInManager.IsSignedIn(User))
+                        @if (signinManager.IsSignedIn(User))
                         {
                             <form method="post">
                                 <div class="mb-3">
@@ -64,16 +67,16 @@
                                 </div>
                                 <div class="mb-3">
                                     <button type="submit" class="btn btn-dark">Submit</button>
-                                    <input type="hidden" asp-for="Id" />
-                                    <input type="hidden" asp-for="UrlHandle" />
+                                    <input type="hidden" asp-for="@Model.BlogPostInfo.Id" />
+                                    <input type="hidden" asp-for="@Model.BlogPostInfo.UrlHandle" />
                                 </div>
                             </form>
                         }
                     </div>
-                    <div class="card-body">
-                        @if (Model.Comments != null && Model.Comments.Any())
+                     <div class="card-body">
+                        @if (Model.BlogComments != null && Model.BlogComments.Any())
                         {
-                            @foreach (var comment in Model.Comments)
+                            @foreach (var comment in Model.BlogComments)
                             {
                                 <div class="card mb-3">
                                     <div class="card-body">
@@ -81,15 +84,15 @@
                                             @comment.Description
                                         </div>
                                         <div class="d-flex justify-content-between">
-                                            <span class="text-secondary">@comment.Username</span>
+                                            <span class="text-secondary">@comment.UserName</span>
                                             <span class="text-secondary">@comment.DateAdded.ToShortDateString()</span>
                                         </div>
                                     </div>
                                 </div>
                             }
                         }
-                    </div>
-                </div> *@
+                    </div> 
+                </div> 
             }
             else
             {
@@ -101,12 +104,12 @@
 
 
 @section Scripts {
-    @* <script>
+     <script>
         const btnLikeElement = document.getElementById('btnLike');
         const totalLikeElement = document.getElementById('totalLikes');
 
         async function getTotalLikes() {
-            fetch('/api/blogpostlike/@Model.Id/totalLikes', {
+            fetch('/api/BlogPostLike/@Model.BlogPostInfo.Id/totalLikes', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -119,15 +122,15 @@
 
 
         async function addLikeForBlog() {
-            fetch('/api/BlogPostLike/Add', {
+        fetch('/api/BlogPostLike/Add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': '*/*'
                 },
                 body: JSON.stringify({
-                    blogPostId: '@Model.Id',
-                    userId: '@userManager.GetUserId(User)'
+                blogPostId: '@Model.BlogPostInfo.Id',
+                userId: '@userManager.GetUserId(User)'
                 })
             }).then(() => {
                 btnLikeElement.innerHTML = '<i class="bi bi-hand-thumbs-up-fill"></i>';
@@ -137,7 +140,7 @@
         }
 
 
-        btnLikeElement.addEventListener('click', addLikeForBlog);
+         btnLikeElement.addEventListener('click', addLikeForBlog);
 
-    </script> *@
+    </script> 
 }
