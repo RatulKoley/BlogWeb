@@ -38,16 +38,16 @@
                             <td>@user.UserName</td>
                             <td>@user.EmailAddress</td>
                             <td>
-                                <form method="post"
-                                      asp-controller="AdminUsers"
-                                      asp-action="Delete"
-                                      asp-route-id="@user.Id">
-                                    <button class="btn btn-danger" type="submit">Edit</button>
-                                </form>
-                                <form method="post"
-                                      asp-controller="AdminUsers"
-                                      asp-action="Delete"
-                                      asp-route-id="@user.Id">
+                                    <a asp-area=""
+                                       asp-controller="Account"
+                                       asp-action="Edit"
+                                       asp-route-id="@user.Id">
+                                        Edit
+                                    </a>
+                                    <form method="post"
+                                    asp-controller="Account"
+                                    asp-action="Delete"
+                                    asp-route-id="@user.Id">
                                     <button class="btn btn-danger" type="submit">Delete</button>
                                 </form>
                             </td>
@@ -89,11 +89,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Password</label>
-                        
+
                         <input type="password" id="password" class="form-control" asp-for="@Model.newUserInfo.newRegister.Password" required minlength="8"
                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z\d]).{8,}(?:(.)(?!.*\1)){2,}" />
                         <span asp-validation-for="@Model.newUserInfo.newRegister.Password" class="text-danger"></span>
-                        
+
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
@@ -119,5 +119,6 @@
             </div>
         </div>
     </div>
-
 </form>
+
+

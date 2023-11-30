@@ -21,7 +21,10 @@ namespace BlogWeb.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(TagViewModel objModel)
         {
-            await tagrepo.AddAsync(objModel.TagInfo);
+            if (ModelState.IsValid)
+            {
+                await tagrepo.AddAsync(objModel.TagInfo);
+            }
             return RedirectToAction("List");
         }
         [HttpGet]
