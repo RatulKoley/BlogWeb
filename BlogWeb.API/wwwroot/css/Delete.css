@@ -1,0 +1,78 @@
+﻿.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.8); /* Increased shadow values */
+    margin: 50px auto;
+}
+
+.card-for-delete {
+    max-width: 450px;
+}
+.card-for-delete-table {
+    max-width: 350px;
+}
+
+.content-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.profile-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.profile-picture {
+    border-radius: 50%;
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border: 2px solid #000000;
+    margin-bottom: 15px;
+}
+
+.text-and-buttons {
+    flex-grow: 1;
+    margin-left: 35px; /* Adjust the margin as needed */
+}
+
+.btn-container {
+    display: flex;
+    margin-top:15px;
+}
+/* Updated button styles for a more attractive look */
+.btn-danger {
+    background-color: #dc3545;
+    border: 1px solid #dc3545;
+    color: #fff;
+    margin-right: 10px;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s; /* Smooth transition */
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+        border-color: #c82333;
+        color: #fff;
+    }
+
+.btn-secondary {
+    background-color: #6c757d;
+    border: 1px solid #6c757d;
+    color: #fff;
+    transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+}
+
+    .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+        color: #fff;
+    }
+

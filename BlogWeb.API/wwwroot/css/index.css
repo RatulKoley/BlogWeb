@@ -1,0 +1,109 @@
+/* index.css */
+
+body {
+    color: #ecf0f1;
+}
+.card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.6), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 20px;
+}
+.table {
+    width: 100%;
+    margin-top: 20px;
+    border-spacing: 0; /* Set border spacing to 0 */
+}
+
+    .table th, .table td {
+        padding: 15px;
+        text-align: center;
+        border: 1px solid #1c2833; /* Adjusted dark blue color */
+    }
+
+    .table th {
+        background-color: #34495e;
+        color: #ecf0f1;
+        border: none; /* Remove border from header */
+    }
+
+    .table td {
+        color: #34495e;
+    }
+
+    /* Alternate row colors */
+    .table tbody tr:nth-child(odd) {
+        background-color: #ecf0f1; /* Lighter color for odd rows */
+    }
+
+    .table tbody tr:nth-child(even) {
+        background-color: #d2d7db; /* Darker color for even rows */
+    }
+
+.create-button {
+    display: inline-block;
+    padding: 8px 12px; /* Adjusted padding */
+    font-size: 0.9em; /* Adjusted font size */
+    font-weight: 400;
+    text-decoration: none;
+    color: #ecf0f1;
+    background-color: #3498db;
+    border-radius: 20px; /* Adjusted border radius */
+    transition: background-color 0.3s, border 0.3s;
+    border: 2px solid transparent;
+}
+
+    .create-button:hover {
+        background-color: #ecf0f1;
+        color: #3498db;
+        text-decoration: none;
+        border: 2px solid #3498db;
+    }
+
+.edit-button, .delete-button {
+    display: inline-block;
+    padding: 5px 10px;
+    font-size: 0.8em;
+    font-weight: bold;
+    text-decoration: none;
+    color: #ecf0f1;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+    background: none;
+    border: none;
+}
+
+    .edit-button:hover, .delete-button:hover {
+        text-decoration: none;
+        background-color: #e74c3c;
+    }
+
+.table-header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+}
+.edit-button, .delete-button {
+    border-radius: 50px;
+}
+.edit-button:hover {
+    text-decoration: none;
+    background-color: #2c3e50;
+    color: #ecf0f1;
+    border-radius: 50px;
+}
+
+.delete-button:hover {
+    text-decoration: none;
+    background-color: #2c3e50; 
+    color: #ecf0f1;
+    border-radius: 50px;
+}
+
+
+
+/*For Pagination */
+
+    .page-link:hover {
+        background-color: #007bff;
+        color: #fff; /* Text color on hover */
+    }

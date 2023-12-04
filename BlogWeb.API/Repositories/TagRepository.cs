@@ -53,7 +53,7 @@ namespace BlogWeb.API.Repositories
 
         public Task<Tag?> GetAsync(Guid Id)
         {
-            return dbcon.Tags.FirstOrDefaultAsync(_=>_.Id == Id);
+            return dbcon.Tags.FirstOrDefaultAsync(_ => _.Id == Id);
         }
     }
 }

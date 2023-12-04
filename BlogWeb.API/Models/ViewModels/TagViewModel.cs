@@ -4,6 +4,6 @@ namespace BlogWeb.API.Models.ViewModels
 {
     public class TagViewModel
     {
-        public required Tag TagInfo { get;set; }
+        public required Tag TagInfo { get; set; }
     }
 }

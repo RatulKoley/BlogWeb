@@ -1,9 +1,13 @@
-﻿namespace BlogWeb.API.Models.ViewModels
+﻿using BlogWeb.API.Models.Helpers;
+
+namespace BlogWeb.API.Models.ViewModels
 {
-    public class UserListViewModel
+    public class UserListViewModel : CommonModel
     {
         public List<UserModel> UserList { get; set; }
         public NewUser newUserInfo { get; set; }
+        public string? OldPassword { get; set; }
+        public string? NewPassword { get; set; }
     }
     public class UserModel
     {

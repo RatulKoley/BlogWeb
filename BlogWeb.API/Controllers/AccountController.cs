@@ -65,28 +65,15 @@ namespace BlogWeb.API.Controllers
         {
             return View(); ;
         }
-        [Authorize(Roles = "SuperAdmin")]
-        public IActionResult RegisterAdmin()
-        {
-            return View();
-        }
-        [HttpPost]
-        public async Task<IActionResult> RegisterAdmin(RegisterViewModel objModel)
-        {
-            var result = await accountrepo.RegisterAdmin(objModel);
-            if (result.SuccessMassage != null)
-            {
-                return RedirectToAction("Index", "Home");
-            }
-            return View();
-        }
 
         [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> UserList()
+        public async Task<IActionResult> UserList(string searchterm, string orderBy = "", int CurrentPage = 1)
         {
+            searchterm = string.IsNullOrEmpty(searchterm) ? "" : searchterm.ToLower();
+            UserListViewModel ObjModel = new();
+            ObjModel.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "name_desc" : "";
             var users = await accountrepo.GetAll();
-            UserListViewModel NewModel = new();
-            NewModel.UserList = new();
+            ObjModel.UserList = new();
             foreach (var user in users)
             {
                 UserModel newEntry = new()
@@ -95,9 +82,32 @@ namespace BlogWeb.API.Controllers
                     UserName = user.UserName,
                     EmailAddress = user.Email
                 };
-                NewModel.UserList.Add(newEntry);
+                ObjModel.UserList.Add(newEntry);
             }
-            return View(NewModel);
+            var IndexList = ObjModel.UserList.Where(_ => _.UserName.ToLower().Contains(searchterm) || searchterm == null).ToList();
+
+            switch (orderBy)
+            {
+                case "name_desc":
+                    IndexList = IndexList.OrderByDescending(a => a.UserName).ToList();
+                    break;
+                default:
+                    IndexList = IndexList.OrderBy(a => a.UserName).ToList();
+                    break;
+            }
+            int TotalRecords = IndexList.Count();
+            int PageSize = 5;
+            int TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
+            IndexList = IndexList.Skip((CurrentPage - 1) * PageSize).Take(PageSize).ToList();
+
+            ObjModel.UserList = IndexList;
+            ObjModel.CurrentPage = CurrentPage;
+            ObjModel.TotalPage = TotalPages;
+            ObjModel.PageSize = PageSize;
+            ObjModel.Term = searchterm;
+            ObjModel.OrderBy = orderBy;
+
+            return View(ObjModel);
         }
         [HttpPost]
         public async Task<IActionResult> UserList(UserListViewModel objModel)
@@ -123,6 +133,28 @@ namespace BlogWeb.API.Controllers
             }
             return View(null);
         }
+        public async Task<IActionResult> EditByName(string username)
+        {
+            UserListViewModel objModel = new();
+            var result = await accountrepo.GetUserByName(username);
+            if (result != null)
+            {
+                objModel = result;
+                return View(objModel);
+            }
+            return View(null);
+        }
+        public async Task<IActionResult> ChangePassword(string username)
+        {
+            UserListViewModel objModel = new();
+            var result = await accountrepo.GetUserByName(username);
+            if (result != null)
+            {
+                objModel = result;
+                return View(objModel);
+            }
+            return View(null);
+        }
         [HttpPost]
         public async Task<IActionResult> Edit(UserListViewModel objModel)
         {
@@ -130,6 +162,28 @@ namespace BlogWeb.API.Controllers
             if (objModel != null)
             {
                 return RedirectToAction("UserList");
+            }
+            return View();
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> EditByName(UserListViewModel objModel)
+        {
+            await accountrepo.EditUserByName(objModel);
+            if (objModel != null)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            return View();
+
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(UserListViewModel objModel)
+        {
+            await accountrepo.ChangePassword(objModel);
+            if (objModel != null)
+            {
+                return RedirectToAction("Index", "Home");
             }
             return View();
 

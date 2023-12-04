@@ -23,3 +23,13 @@ body {
 .blog-details-content img{
     max-width:100%;
 }
+.container{
+    max-width:85%
+}
+
+#homescreenbodytag {
+    background: linear-gradient(45deg, #aaffc3, #b8b0ff);
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+}

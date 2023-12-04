@@ -57,28 +57,6 @@ namespace BlogWeb.API.Repositories
             return objModel;
         }
 
-
-        public async Task<RegisterViewModel> RegisterAdmin(RegisterViewModel objModel)
-        {
-            var FindUser = await _userManager.FindByNameAsync(objModel.UserName);
-            if (FindUser != null)
-            {
-                if (!await _userManager.IsInRoleAsync(FindUser, "Admin"))
-                {
-                    var identityRole = await _userManager.AddToRoleAsync(FindUser, "Admin");
-                    if (identityRole.Succeeded)
-                    {
-                        objModel.SuccessMassage = "Admin Role Assigned";
-                    }
-                }
-                else
-                {
-                    objModel.SuccessMassage = "Already Admin";
-                }
-            }
-            return objModel;
-        }
-
         //User Repositories
         public async Task<IEnumerable<IdentityUser>> GetAll()
         {
@@ -132,6 +110,26 @@ namespace BlogWeb.API.Repositories
             }
             return null;
         }
+        public async Task<UserListViewModel?> GetUserByName(string UserName)
+        {
+            UserListViewModel returnModel = new();
+            returnModel.newUserInfo = new();
+            returnModel.newUserInfo.newRegister = new();
+            var FindUser = await _userManager.FindByNameAsync(UserName);
+            if (FindUser != null)
+            {
+                returnModel.newUserInfo.newRegister.UserId = FindUser.Id;
+                returnModel.newUserInfo.newRegister.UserName = FindUser.UserName;
+                returnModel.newUserInfo.newRegister.Email = FindUser.Email;
+
+                if (await _userManager.IsInRoleAsync(FindUser, "Admin"))
+                    returnModel.newUserInfo.isAdmin = true;
+                else
+                    returnModel.newUserInfo.isAdmin = false;
+                return returnModel;
+            }
+            return null;
+        }
 
         public async Task<UserListViewModel?> EditUser(UserListViewModel objModel)
         {
@@ -140,8 +138,48 @@ namespace BlogWeb.API.Repositories
             {
                 FindUser.UserName = objModel.newUserInfo.newRegister.UserName;
                 FindUser.Email = objModel.newUserInfo.newRegister.Email;
+                if (objModel.newUserInfo.isAdmin)
+                {
+                    if (!await _userManager.IsInRoleAsync(FindUser, "Admin"))
+                    {
+                        await _userManager.AddToRoleAsync(FindUser, "Admin");
+                    }
+                }
+                else
+                {
+                    if (await _userManager.IsInRoleAsync(FindUser, "Admin"))
+                    {
+                        await _userManager.RemoveFromRoleAsync(FindUser, "Admin");
+                    }
+                }
                 await _userManager.UpdateAsync(FindUser);
                 return objModel;
+            }
+            return null;
+        }
+
+        public async Task<UserListViewModel?> EditUserByName(UserListViewModel objModel)
+        {
+            var FindUser = await _userManager.FindByIdAsync(objModel.newUserInfo.newRegister.UserId);
+            if (FindUser != null)
+            {
+                FindUser.UserName = objModel.newUserInfo.newRegister.UserName;
+                FindUser.Email = objModel.newUserInfo.newRegister.Email;
+                await _userManager.UpdateAsync(FindUser);
+                return objModel;
+            }
+            return null;
+        }
+        public async Task<UserListViewModel?> ChangePassword(UserListViewModel objModel)
+        {
+            var FindUser = await _userManager.FindByIdAsync(objModel.newUserInfo.newRegister.UserId);
+            if (FindUser != null)
+            {
+                if (objModel.OldPassword != null && objModel.NewPassword != null)
+                {
+                    await _userManager.ChangePasswordAsync(FindUser, objModel.OldPassword, objModel.NewPassword);
+                    return objModel;
+                }
             }
             return null;
         }

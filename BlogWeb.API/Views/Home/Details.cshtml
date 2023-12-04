@@ -5,94 +5,142 @@
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<IdentityUser> signinManager
 @inject UserManager<IdentityUser> userManager
+<style>
+    .blog-post {
+        background-color: #fff;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
 
+    .meta-data {
+        font-size: 14px;
+        color: #777;
+    }
 
-<div class="container my-5">
+    .interaction a {
+        text-decoration: none;
+        color: #007bff;
+        cursor: pointer;
+    }
+
+    .tags .badge {
+        font-size: 12px;
+        margin-right: 5px;
+        background-color: #007bff;
+    }
+
+    .comment-description {
+        margin-bottom: 10px;
+    }
+
+    .meta-data .author,
+    .meta-data .date {
+        font-size: 15px;
+        color: #777;
+        font-weight:600;
+    }
+    #detailsbodytag{
+        max-width:100%;
+    }
+</style>
+
+<div class="container my-5" id="detailsbodytag" >
     <div class="row justify-content-center">
-        <div class="col-12 col-lg-6">
+        <div class="col-12 col-lg-8">
 
             @if (Model != null)
             {
-                <h1 class="mb-3">@Model.BlogPostInfo.Heading</h1>
+                <article class="blog-post">
+                    <nav style="--bs-breadcrumb-divider: url(&#34;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8'%3E%3Cpath d='M2.5 0L1 1.5 3.5 4 1 6.5 2.5 8l4-4-4-4z' fill='%236c757d'/%3E%3C/svg%3E&#34;);" aria-label="breadcrumb">
+                        <ol class="breadcrumb" style="font-weight:600; font-size:14px;">
+                            <li class="breadcrumb-item"><a style="text-decoration:none; color: #777;" asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Blog</li>
+                        </ol>
+                    </nav>
+                    <h1 class="mb-3" style="font-weight:600">@Model.BlogPostInfo.Heading</h1>
 
-                <div class="d-flex justify-content-between mb-3">
-                    <span class="text-secondary">@Model.BlogPostInfo.Author</span>
-                    <span class="text-secondary">@Model.BlogPostInfo.PublishedDate.ToShortDateString()</span>
-                </div>
+                    <div class="meta-data mb-3" style="text-align:right;">
+                        <span class="author">@Model.BlogPostInfo.Author</span> <br>
+                        <span class="date">@Model.BlogPostInfo.PublishedDate.ToShortDateString()</span>
+                    </div>
 
-                <div class="mb-3">
-                    @if (signinManager.IsSignedIn(User))
-                    {
-                         if (Model.IsLiked)
-                        {
-                            <a style="cursor: pointer;">
-                                <i class="bi bi-hand-thumbs-up-fill"></i>
-                            </a>
-                        }
-                        else
-                        { 
-                            <a id="btnLike" style="cursor: pointer;">
-                                <i class="bi bi-hand-thumbs-up"></i>
-                            </a>
-                         } 
-                    }
-
-                    <span id="totalLikes">@Model.TotalLikes</span> likes
-                </div>
-
-                <div class="mb-3 d-flex">
-                    @foreach (var tag in Model.BlogPostInfo.Tags)
-                    {
-                        <span class="badge bg-secondary me-1">@tag.Name</span>
-                    }
-                </div>
-
-                <img src="@Model.BlogPostInfo.FeaturedImageUrl" class="d-block img-fluid mb-3" />
-
-                <div class="mb-3 blog-details-content">
-                    @Html.Raw(Model.BlogPostInfo.Content)
-                </div>
-
-
-                 <div class="card">
-                    <div class="card-header">
-                        <h5>Comments</h5>
-
+                     <div class="interaction mb-3" >
                         @if (signinManager.IsSignedIn(User))
                         {
-                            <form method="post">
-                                <div class="mb-3">
-                                    <label class="form-label">Comment Description</label>
-                                    <input type="text" class="form-control" asp-for="CommentDescription" />
-                                </div>
-                                <div class="mb-3">
-                                    <button type="submit" class="btn btn-dark">Submit</button>
-                                    <input type="hidden" asp-for="@Model.BlogPostInfo.Id" />
-                                    <input type="hidden" asp-for="@Model.BlogPostInfo.UrlHandle" />
-                                </div>
-                            </form>
-                        }
-                    </div>
-                     <div class="card-body">
-                        @if (Model.BlogComments != null && Model.BlogComments.Any())
-                        {
-                            @foreach (var comment in Model.BlogComments)
+                            if (Model.IsLiked)
                             {
-                                <div class="card mb-3">
-                                    <div class="card-body">
-                                        <div>
-                                            @comment.Description
-                                        </div>
-                                        <div class="d-flex justify-content-between">
-                                            <span class="text-secondary">@comment.UserName</span>
-                                            <span class="text-secondary">@comment.DateAdded.ToShortDateString()</span>
-                                        </div>
-                                    </div>
-                                </div>
+                                <a style="cursor: pointer;">
+                                    <i class="bi bi-hand-thumbs-up-fill"></i>
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="btnLike" style="cursor: pointer;">
+                                    <i class="bi bi-hand-thumbs-up"></i>
+                                </a>
                             }
                         }
+                        <span id="totalLikes">@Model.TotalLikes</span> likes
                     </div> 
-                </div> 
+
+                    
+
+                    <div class="tags mb-3">
+                        @foreach (var tag in Model.BlogPostInfo.Tags)
+                        {
+                            <span class="badge bg-secondary me-1">#@tag.Name</span>
+                        }
+                    </div>
+
+                    <img style="border-radius: 40px; max-width: 100%;" src="@Model.BlogPostInfo.FeaturedImageUrl" class="img-fluid mb-4" alt="@Model.BlogPostInfo.Heading" />
+
+                    <div class="blog-details-content mb-5">
+                        @Html.Raw(Model.BlogPostInfo.Content)
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            
+
+                            @if (signinManager.IsSignedIn(User))
+                            {
+                                <form method="post">
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" asp-for="CommentDescription" placeholder="Write Comment Here"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <button type="submit" class="btn btn-dark">Submit</button>
+                                        <input type="hidden" asp-for="@Model.BlogPostInfo.Id" />
+                                        <input type="hidden" asp-for="@Model.BlogPostInfo.UrlHandle" />
+                                    </div>
+                                </form>
+                            }
+                            else
+                            {
+                                <p style="margin-left:5px; font-size:18px;">Please <a asp-controller="account" asp-action="login">Login</a>  To Start Commenting</p>
+                            }
+                        </div>
+                        <div class="card-body">
+                            <h5 style="margin-left:7px;">Comments :</h5>
+                            @if (Model.BlogComments != null && Model.BlogComments.Any())
+                            {
+                                @foreach (var comment in Model.BlogComments)
+                                {
+                                    <div class="card mb-3">
+                                        <div class="card-body">
+                                            <p class="comment-description">@comment.Description</p>
+                                            <div class="meta-data d-flex justify-content-between">
+                                                <span class="author">@comment.UserName</span>
+                                                <span class="date">@comment.DateAdded.ToShortDateString()</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </article>
             }
             else
             {

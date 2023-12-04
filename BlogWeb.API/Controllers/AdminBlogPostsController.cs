@@ -1,9 +1,12 @@
-﻿using BlogWeb.API.Models.Domains;
+﻿using BlogWeb.API.Data;
+using BlogWeb.API.Models.Domains;
+using BlogWeb.API.Models.Helpers;
 using BlogWeb.API.Models.ViewModels;
 using BlogWeb.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 
 namespace BlogWeb.API.Controllers
 {
@@ -11,10 +14,12 @@ namespace BlogWeb.API.Controllers
     public class AdminBlogPostsController : Controller
     {
         private readonly ITagRepository tagrepo;
+        private readonly BlogDBContext dbcon;
         private readonly IBlogPostRepository blogrepo;
-        public AdminBlogPostsController(ITagRepository tagrepo, IBlogPostRepository blogrepo)
+        public AdminBlogPostsController(ITagRepository tagrepo, IBlogPostRepository blogrepo, BlogDBContext dbcon)
         {
             this.tagrepo = tagrepo;
+            this.dbcon = dbcon;
             this.blogrepo = blogrepo;
         }
         [HttpGet]
@@ -46,14 +51,40 @@ namespace BlogWeb.API.Controllers
             }
             objModel.blogPostInfo.Tags = AllTags;
             await blogrepo.AddAsync(objModel.blogPostInfo);
-            return RedirectToAction("Add");
+            return RedirectToAction("List");
         }
 
-        [HttpGet]
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string searchterm, string orderBy = "", int CurrentPage = 1)
         {
-            var result = await blogrepo.GetAllAsync();
-            return View(result);
+            searchterm = string.IsNullOrEmpty(searchterm) ? "" : searchterm.ToLower();
+            BlogPostListViewModel ObjModel = new();
+            ObjModel.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "name_desc" : "";
+
+            var IndexList = dbcon.BlogPosts.AsNoTracking().Include(_ => _.Tags).Where(_ => _.Visible == true
+                        && _.Heading.ToLower().Contains(searchterm) || searchterm == null);
+
+            switch (orderBy)
+            {
+                case "name_desc":
+                    IndexList = IndexList.OrderByDescending(a => a.Heading);
+                    break;
+                default:
+                    IndexList = IndexList.OrderBy(a => a.Heading);
+                    break;
+            }
+            int TotalRecords = IndexList.Count();
+            int PageSize = 5;
+            int TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
+            IndexList = IndexList.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
+
+            ObjModel.BlogPostList = IndexList;
+            ObjModel.CurrentPage = CurrentPage;
+            ObjModel.TotalPage = TotalPages;
+            ObjModel.PageSize = PageSize;
+            ObjModel.Term = searchterm;
+            ObjModel.OrderBy = orderBy;
+
+            return View(ObjModel);
         }
 
         [HttpGet]
@@ -99,12 +130,12 @@ namespace BlogWeb.API.Controllers
             return RedirectToAction("Edit", new { id = objModel.blogPostInfo.Id });
         }
         [HttpPost]
-        public async Task<IActionResult> Delete(AdminBlogPostViewModel objModel)
+        public async Task<IActionResult> Delete(Guid Id)
         {
-            var result = await blogrepo.DeleteAsync(objModel.blogPostInfo.Id);
+            var result = await blogrepo.DeleteAsync(Id);
             if (result != null)
                 return RedirectToAction("List");
-            return RedirectToAction("Edit", new { id = objModel.blogPostInfo.Id });
+            return RedirectToAction("Edit", new { id = Id });
         }
     }
 }

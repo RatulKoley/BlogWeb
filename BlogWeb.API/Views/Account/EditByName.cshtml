@@ -6,11 +6,11 @@
 <link rel="stylesheet" href="~/css/Create.css" />
 <div class="card card-for-category">
     <div class="card-body">
-        <form method="post" enctype="multipart/form-data" asp-action="Edit">
+        <form method="post" enctype="multipart/form-data" asp-action="EditByName">
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="form-group">
-                        <input type="text" class="form-control" id="id" asp-for="@Model.newUserInfo.newRegister.UserId" readonly />
+                        <input type="hidden" class="form-control" id="id" asp-for="@Model.newUserInfo.newRegister.UserId" readonly />
                         <span asp-validation-for="@Model.newUserInfo.newRegister.UserId" class="label-danger"></span>
                     </div>
                 </div>
@@ -31,23 +31,11 @@
                     </div>
                 </div>
             </div>
-            @if (User.IsInRole("SuperAdmin"))
-            {
-                <div class="row">
-                    <div class="col-md-10 offset-md-1">
-                        <div class="form-check">
-                            <input type="checkbox" id="chkAdminRole" class="form-check-input"
-                                   asp-for="@Model.newUserInfo.isAdmin" />
-                            <label class="form-check-label" for="chkAdminRole">Admin Role</label>
-                        </div>
-                    </div>
-                </div>
-            }
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="form-group" id="botam">
                         <input type="submit" value="Update" class="btn btn-create" />
-                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Back</button>
                     </div>
                 </div>
             </div>

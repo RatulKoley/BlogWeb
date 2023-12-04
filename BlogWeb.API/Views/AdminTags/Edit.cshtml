@@ -1,51 +1,45 @@
 ﻿@model BlogWeb.API.Models.ViewModels.TagViewModel
 @{
 }
-<div class="bg-secondary bg-opacity-10 py-2">
-    <div class="container">
-        <h1>Edit Tag - Admin Functionality</h1>
-    </div>
-</div>
-<div class="container py-5">
+<link rel="stylesheet" href="~/css/Edit.css" />
+
+<div class="card card-for-tag">
     @if (Model.TagInfo != null)
     {
-        <form method="post">
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" asp-action="Edit">
+                <input type="hidden" asp-for="TagInfo.Id" />
 
-            <div class="mb-3">
-                <label class="form-label">Id</label>
-                <input type="text" id="id" class="form-control" asp-for="TagInfo.Id" readonly />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Name</label>
-                <input type="text" id="name" class="form-control" asp-for="TagInfo.Name" />
-            </div>
-
-            <div class="mb-3">
-                <label class="form-label">Display Name</label>
-                <input type="text" id="displayName" class="form-control" asp-for="TagInfo.DisplayName" />
-            </div>
-
-            <div class="mb-3">
-
-                <div class="d-flex">
-                    <button type="submit" class="btn btn-dark">Update</button>
-
-                    <button class="btn btn-danger ms-2" type="submit"
-                            asp-area=""
-                            asp-controller="AdminTags"
-                            asp-action="Delete">
-                        Delete
-                    </button>
-
+                <div class="form-group">
+                    <input asp-for="TagInfo.Name" id="CategoryName" class="form-control" placeholder="Enter Name" />
+                    <span asp-validation-for="TagInfo.Name" class="text-danger"></span>
                 </div>
 
-            </div>
+                <div class="form-group" id="da">
+                    <input asp-for="TagInfo.DisplayName" id="CategoryDescription" class="form-control" placeholder="Enter Percentage" />
+                    <span asp-validation-for="TagInfo.DisplayName" class="text-danger"></span>
+                </div>
 
-        </form>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-update">Update</button>
+                            <a class="btn btn-cancel" onclick="window.history.back()">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     }
     else
     {
         <p>Tag not found!</p>
     }
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

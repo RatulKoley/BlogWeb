@@ -1,6 +1,89 @@
 ﻿@{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "About Me";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+
+<style>
+
+    #h1tag {
+        color: #0f0b00;
+        text-align:center;
+        font-weight:600;
+        margin-bottom:20px;
+        -webkit-text-stroke: 1px #805e00; /* For Chrome and Safari */
+        text-stroke: 1px #805e00; /* For other browsers */
+    }
+
+    #ptag {
+        font-size: 18px;
+        margin-top: 10px;
+    }
+
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    #litag {
+        margin-bottom: 10px;
+    }
+
+    .social-links a {
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 24px;
+        text-decoration: none;
+    }
+
+    .box {
+        background-color: #fff;
+        padding: 10px;
+        text-align:center;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
+        margin-bottom: 20px;
+    }
+
+    #bodytag {
+        background-color: #343434;
+    }
+    </style>
+
+<body id="bodytag">
+    <h1 id="h1tag">@ViewData["Title"]</h1>
+    <div class="box">
+        <p id="ptag" style="font-size:23px;font-weight:600;">Hi there, Myself Ratul Koley</p>
+        <p id="ptag" style="font-size:23px;font-weight:600;">A Passionate Full Stack Web Developer</p>
+
+        <div class="social-links">
+            <a style="color: #1F1F1F;" href="https://github.com/RatulKoley"><i class='bx bxl-github'></i></a>
+            <a href="https://www.linkedin.com/in/ratulkoley"><i class='bx bxl-linkedin'></i></a>
+            <a style="color: #7285D1;" href="https://discord.com/invite/NG6mHjnhTQ"><i class='bx bxl-discord-alt'></i></a>
+            <a style="color: #FF0000;" href="https://www.youtube.com/channel/UCZKi8INtrkNqudOWNkgA_2Q"><i class='bx bxl-youtube'></i></a>
+        </div>
+
+        <p id="ptag" style="margin-left:25px;margin-right:25px; font-size:16px;">After Completing My Study in 2023, I Started This Blog. If You Like My Work,
+            You Can Help Me Buying A Coffee (<a style="color:#FF7B00" href="https://www.fiverr.com/"><i class='bx bx-coffee-togo'></i></a>). If You Like To Submit Your Own Blog,
+            You Can Also Do That. Isn't It Great. So Lets Enjoy This Together And Make A Best Place For All Of Us.</p>
+    </div>
+    <h1 id="h1tag">About This Website</h1>
+    <div class="box">
+        
+        <p id="ptag" style="font-size:17px;">This website is a platform where I share insights, experiences,
+            and updates related to web development and technology. We cover a variety of topics to help you find solutions to make your coding journey a little better</p>
+        <h5>Categories Include : 
+            <span class="badge bg-secondary">ASP Dot Net</span>
+            <span class="badge bg-secondary">Angular</span>
+            <span class="badge bg-secondary">React</span>
+            <span class="badge bg-secondary">Entity Framework</span>
+            <span class="badge bg-secondary">Blazor Server</span>
+        </h5>
+        <p id="ptag">Explore our content, and feel free to give us yours if you have any questions or suggestions!</p>
+    </div>
+    <h1 id="h1tag">Contact Me</h1>
+    <div class="box">
+        <p id="ptag"><strong>Email </strong>therealbonggamer@gmail.com</p>
+        <p id="ptag"><strong>Phone </strong>+91 7980670755</p>
+    </div>
+</body>
+

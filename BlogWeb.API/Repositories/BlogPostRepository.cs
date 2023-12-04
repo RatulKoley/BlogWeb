@@ -13,6 +13,7 @@ namespace BlogWeb.API.Repositories
         }
         public async Task<BlogPost> AddAsync(BlogPost blogPost)
         {
+            blogPost.Visible = true;
             dbcon.BlogPosts.Add(blogPost);
             await dbcon.SaveChangesAsync();
             return blogPost;
@@ -48,7 +49,7 @@ namespace BlogWeb.API.Repositories
                 result.UrlHandle = blogPost.UrlHandle;
                 result.PublishedDate = blogPost.PublishedDate;
                 result.Author = blogPost.Author;
-                result.Visible = blogPost.Visible;
+                result.Visible = true;
                 result.Tags = blogPost.Tags;
 
                 dbcon.BlogPosts.Update(result);

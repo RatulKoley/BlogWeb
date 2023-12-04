@@ -1,7 +1,52 @@
 ﻿
 @{
 }
+<head>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f9fa;
+            text-align: center;
+        }
 
-<div class="container my-5">
-    <h2>You are not allowed to access this page!</h2>
-</div>
+
+        h2 {
+            color: #e44d26;
+        }
+
+        p {
+            font-size: 18px;
+            margin-top: 20px;
+        }
+
+        .icon {
+            font-size: 100px;
+            color: #e44d26;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+            a:hover {
+                text-decoration: none;
+                
+            }
+    </style>
+</head>
+<body>
+
+    <div class="container my-5">
+        <div class="icon">&#x26A0;</div>
+        <h2>Access Denied</h2>
+        <p>We're sorry, but you do not have permission to access this page.</p>
+        <p>If you believe this is an error, please contact the administrator.</p>
+        <p>
+            <a class="nav-link text-dark" id="button" asp-area="" asp-controller="Home" asp-action="Index">
+                <span style="background-color: #FF2900; padding: 10px; border-radius: 10px; box-shadow: 0 0 10px rgba(1, 1, 1, 9.8);
+font-weight:700;">RETURN HOME</span>
+            </a>
+        </p>
+    </div>
+
+</body>

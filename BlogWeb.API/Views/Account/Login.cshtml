@@ -3,34 +3,51 @@
 @{
 }
 
-
-<div class="container mx-auto">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-6">
-
-            <h1 class="mt-3 mb-3 h3">
-                Login
-            </h1>
-
-            <form method="post">
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" id="username" class="form-control" asp-for="UserName" required />
-                    <span class="text-danger" asp-validation-for="UserName"></span>
+<link rel="stylesheet" href="~/css/Create.css" />
+<div class="card card-for-category">
+    <div class="card-body">
+        <form method="post" enctype="multipart/form-data" asp-action="Login">
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="form-group">
+                        <input asp-for="UserName" class="form-control" placeholder="UserName" required />
+                        <span asp-validation-for="UserName" class="label-danger"></span>
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" id="password" class="form-control" asp-for="Password" required minlength="6" />
-                    <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="form-group">
+                        <input type="password" id="password" asp-for="Password" class="form-control" placeholder="Password" required minlength="8" />
+                        <span asp-validation-for="Password" class="label-danger"></span>
+                    </div>
                 </div>
-
-                <div class="mb-3">
-                    <button type="submit" class="btn btn-dark">Login</button>
+            </div>
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <div class="form-group" id="botam">
+                        <input type="submit" value="Login" class="btn btn-create" />
+                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                    </div>
                 </div>
-
-                 <input type="hidden" asp-for="ReturnUrl" /> 
-            </form>
-        </div>
+            </div>
+            <input type="hidden" asp-for="ReturnUrl" />
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    @if (!string.IsNullOrEmpty(ViewBag.Message))
+                    {
+                        <div class="error-message">
+                            <label class="label label-danger">@ViewBag.Message</label>
+                        </div>
+                    }
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

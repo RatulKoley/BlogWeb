@@ -1,4 +1,6 @@
-﻿@model BlogWeb.API.Models.Helpers.BlogPostListViewModel
+﻿@model BlogWeb.API.Models.Helpers.TagListViewModel
+@{
+}
 
 <link rel="stylesheet" href="~/css/index.css" />
 
@@ -9,32 +11,29 @@
                 <i class="fas fa-plus"></i> Add New
             </a>
 
-            <form asp-action="List" style="width: 200px;">
+             <form asp-action="Index" style="width: 200px;">
                 <div class="input-group">
                     <input name="searchterm" class="form-control form-control-sm my-0 py-1 red-border" type="text" style="border: 2px solid #FF5733;
-    border-radius: 15px;" placeholder="Search" />
+                                border-radius: 15px;" placeholder="Search" />
                     <div class="input-group-append">
                     </div>
                 </div>
-            </form>
+            </form> 
         </div>
-        @if (Model != null && Model.BlogPostList.Any())
+        @if (Model != null && Model.TagList.Any())
         {
             <table class="table">
                 <thead class="thead-dark">
                     <tr>
                         <th scope="col">
+                            <h6 style="text-align:center;font-weight:600">Tag Id</h6>
+                        </th>
+                        <th scope="col">
                             <a style="display: block; text-align: center; font-weight: 600; color: inherit; text-decoration: none; margin-bottom: 6px;"
-                               href="/AdminBlogPosts/List?orderBy=@Model.NameSortOrder">Headings</a>
+                               href="/AdminTags/Index?orderBy=@Model.NameSortOrder">Name</a>
                         </th>
                         <th scope="col">
-                            <h6 style="text-align:center;font-weight:600">Author</h6>
-                        </th>
-                        <th scope="col">
-                            <h6 style="text-align:center;font-weight:600">Created</h6>
-                        </th>
-                        <th scope="col">
-                            <h6 style="text-align:center;font-weight:600">Tags</h6>
+                            <h6 style="text-align:center;font-weight:600">Display</h6>
                         </th>
                         <th scope="col">
                             <h6 style="text-align:center;font-weight:600">Actions</h6>
@@ -42,32 +41,24 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var blogPost in Model.BlogPostList)
+                    @foreach (var tag in Model.TagList)
                     {
                         <tr style="text-align:center; font-size: 14px;">
                             <td>
-                                @Html.DisplayFor(modelItem => blogPost.Heading)
+                                @Html.DisplayFor(modelItem => tag.Id)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @blogPost.Author)
+                                @Html.DisplayFor(modelItem => tag.Name)
                             </td>
                             <td>
-                                @Html.DisplayFor(modelItem => @blogPost.PublishedDate)
-                            </td>
-                            <td>
-                                <div class="d-flex">
-                                    @foreach (var tag in blogPost.Tags)
-                                    {
-                                        <span class="badge bg-secondary me-1">@tag.Name</span>
-                                    }
-                                </div>
+                                @Html.DisplayFor(modelItem => tag.DisplayName)
                             </td>
                             <td class="table-data">
                                 <div class="d-flex justify-content-center align-items-center">
-                                    <a asp-action="Edit" asp-route-id="@blogPost.Id" class="edit-button me-2">
+                                    <a asp-action="Edit" asp-route-id="@tag.Id" class="edit-button me-2">
                                         <i class="fas fa-edit" style="color: #3498db;"></i>
                                     </a>
-                                    <form method="post" asp-action="Delete" asp-route-id="@blogPost.Id" class="delete-form">
+                                    <form method="post" asp-action="Delete" asp-route-id="@tag.Id" class="delete-form">
                                         <button type="submit" class="delete-button" style="background: none; border: none;">
                                             <i class="fas fa-trash-alt" style="color: #e74c3c;"></i>
                                         </button>
@@ -81,10 +72,8 @@
         }
         else
         {
-            <p>No Blogs found!</p>
+            <p>No tags found!</p>
         }
-
-
 
         <nav aria-label="Page navigation example">
             <ul class="pagination" style="display: flex; justify-content: flex-end; margin-top: 20px;">
@@ -97,7 +86,7 @@
     border: 1px solid #007bff;
     border-radius: 3px;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=1" aria-label="Very first page">
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=1" aria-label="Very first page">
                             <span aria-hidden="true">««</span>
                         </a>
                     </li>
@@ -108,7 +97,7 @@
     border: 1px solid #007bff;
     border-radius: 3px;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage - 1)" aria-label="Previous">
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage - 1)" aria-label="Previous">
                             <span aria-hidden="true">«</span>
                         </a>
                     </li>
@@ -125,7 +114,7 @@
     border-radius: 3px;
     background-color: #007bff;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a>
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a>
                         </li>
                     }
                     else
@@ -137,7 +126,7 @@
     border: 1px solid #007bff;
     border-radius: 3px;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a>
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@i"> @i</a>
                         </li>
                     }
                 }
@@ -150,7 +139,7 @@
     border: 1px solid #007bff;
     border-radius: 3px;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage + 1)" aria-label="Next">
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@(Model.CurrentPage + 1)" aria-label="Next">
                             <span aria-hidden="true">»</span>
                         </a>
                     </li>
@@ -161,14 +150,13 @@
     border: 1px solid #007bff;
     border-radius: 3px;
     font-size: 14px;
-    transition: background-color 0.3s, color 0.3s;" href="/AdminBlogPosts/List?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@Model.TotalPage" aria-label="Last page">
+    transition: background-color 0.3s, color 0.3s;" href="/AdminTags/Index?term=@Model.Term&orderBy=@Model.OrderBy&currentPage=@Model.TotalPage" aria-label="Last page">
                             <span aria-hidden="true">»»</span>
                         </a>
                     </li>
                 }
             </ul>
         </nav>
-
 
     </div>
 </div>
