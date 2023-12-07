@@ -2,8 +2,8 @@
 
 namespace BlogWeb.API.Models.ViewModels
 {
-    public class TagViewModel
+    public class CategoryViewModel
     {
-        public Tag TagInfo { get; set; }
+        public Category CategoryModel { get; set; }
     }
 }

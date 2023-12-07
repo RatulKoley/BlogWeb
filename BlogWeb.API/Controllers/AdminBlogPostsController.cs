@@ -56,6 +56,7 @@ namespace BlogWeb.API.Controllers
 
         public async Task<IActionResult> List(string searchterm, string orderBy = "", int CurrentPage = 1)
         {
+            using var transaction = await dbcon.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
             searchterm = string.IsNullOrEmpty(searchterm) ? "" : searchterm.ToLower();
             BlogPostListViewModel ObjModel = new();
             ObjModel.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "name_desc" : "";
@@ -83,7 +84,7 @@ namespace BlogWeb.API.Controllers
             ObjModel.PageSize = PageSize;
             ObjModel.Term = searchterm;
             ObjModel.OrderBy = orderBy;
-
+            await transaction.CommitAsync();
             return View(ObjModel);
         }
 
@@ -101,9 +102,12 @@ namespace BlogWeb.API.Controllers
                     Text = _.DisplayName,
                     Value = _.Id.ToString()
                 });
-                objModel.SelectedTags = result.Tags
-                    .Select(_ => _.Id.ToString()).ToArray();
-
+                if (result.Tags != null)
+                {
+                    objModel.SelectedTags = result.Tags
+                        .Select(_ => _.Id.ToString())
+                        .ToArray();
+                }
                 return View(objModel);
             };
             return View(null);

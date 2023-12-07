@@ -1,4 +1,4 @@
-﻿@model BlogWeb.API.Models.ViewModels.TagViewModel
+﻿@model BlogWeb.API.Models.ViewModels.CategoryViewModel
 @{
 
 }
@@ -9,28 +9,8 @@
             <div class="row">
                 <div class="col-md-10 offset-md-1">
                     <div class="form-group">
-                        <input asp-for="TagInfo.Name" class="form-control" placeholder="Tag Name" required/>
-                        <span asp-validation-for="TagInfo.Name" class="label-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10 offset-md-1">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <select asp-for="TagInfo.CategoryId" class="form-control custom-select" style="border-radius: 5px;" asp-items="ViewBag.CategoryId" required>
-                                <option value="">Select Category</option>
-                            </select>
-                        </div>
-                        <span asp-validation-for="TagInfo.CategoryId" class="label-danger"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-10 offset-md-1">
-                    <div class="form-group">
-                        <input asp-for="TagInfo.DisplayName" class="form-control" placeholder="Display Name" required />
-                        <span asp-validation-for="TagInfo.DisplayName" class="label-danger"></span>
+                        <input asp-for="CategoryModel.Name" class="form-control" placeholder="Category Name" required />
+                        <span asp-validation-for="CategoryModel.Name" class="label-danger"></span>
                     </div>
                 </div>
             </div>

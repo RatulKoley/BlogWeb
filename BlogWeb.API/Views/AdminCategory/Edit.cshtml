@@ -1,0 +1,39 @@
+﻿@model BlogWeb.API.Models.ViewModels.CategoryViewModel
+@{
+}
+<link rel="stylesheet" href="~/css/Edit.css" />
+
+<div class="card card-for-tag">
+    @if (Model.CategoryModel != null)
+    {
+        <div class="card-body">
+            <form method="post" enctype="multipart/form-data" asp-action="Edit">
+                <input type="hidden" asp-for="CategoryModel.Id" />
+
+                <div class="form-group">
+                    <input asp-for="CategoryModel.Name" id="CategoryName" class="form-control" placeholder="Enter Name" />
+                    <span asp-validation-for="CategoryModel.Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-update">Update</button>
+                            <a class="btn btn-cancel" onclick="window.history.back()">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    }
+    else
+    {
+        <p>No Categories Found!</p>
+    }
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

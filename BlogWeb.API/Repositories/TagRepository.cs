@@ -39,6 +39,7 @@ namespace BlogWeb.API.Repositories
             {
                 result.Name = tag.Name;
                 result.DisplayName = tag.DisplayName;
+                result.CategoryId = tag.CategoryId;
                 var updatedTag = dbcon.Tags.Update(result);
                 await dbcon.SaveChangesAsync();
                 return result;

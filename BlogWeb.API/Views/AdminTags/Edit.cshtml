@@ -14,7 +14,14 @@
                     <input asp-for="TagInfo.Name" id="CategoryName" class="form-control" placeholder="Enter Name" />
                     <span asp-validation-for="TagInfo.Name" class="text-danger"></span>
                 </div>
-
+                <div class="form-group" id="da">
+                    <div class="input-group">
+                        <select asp-for="TagInfo.CategoryId" class="form-control custom-select" style="border-radius: 5px;" asp-items="ViewBag.CategoryId">
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                    <span asp-validation-for="TagInfo.CategoryId" class="label-danger"></span>
+                </div>
                 <div class="form-group" id="da">
                     <input asp-for="TagInfo.DisplayName" id="CategoryDescription" class="form-control" placeholder="Enter Percentage" />
                     <span asp-validation-for="TagInfo.DisplayName" class="text-danger"></span>

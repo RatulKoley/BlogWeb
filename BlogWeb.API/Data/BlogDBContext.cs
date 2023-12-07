@@ -11,6 +11,7 @@ namespace BlogWeb.API.Data
         public virtual DbSet<Tag> Tags { get; set; }
         public virtual DbSet<BlogPostComment> BlogPostComments { get; set; }
         public virtual DbSet<BlogPostLike> BlogPostLikes { get; set; }
+        public virtual DbSet<Category> Categorys { get; set; }
 
 
 

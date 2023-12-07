@@ -4,33 +4,31 @@ using BlogWeb.API.Models.ViewModels;
 using BlogWeb.API.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace BlogWeb.API.Controllers
 {
     [Authorize(Roles = "Admin")]
-    public class AdminTagsController : Controller
+    public class AdminCategoryController : Controller
     {
-        private readonly ITagRepository tagrepo;
+        private readonly ICategoriesRepository categoryrepo;
         private readonly BlogDBContext dbcon;
-        public AdminTagsController(ITagRepository tagrepo, BlogDBContext dbcon)
+        public AdminCategoryController(ICategoriesRepository categoryrepo, BlogDBContext dbcon)
         {
-            this.tagrepo = tagrepo;
+            this.categoryrepo = categoryrepo;
             this.dbcon = dbcon;
         }
         [HttpGet]
         public IActionResult Add()
         {
-            ViewData["CategoryId"] = new SelectList(dbcon.Categorys, "Id", "Name");
             return View();
         }
         [HttpPost]
-        public async Task<IActionResult> Add(TagViewModel objModel)
+        public async Task<IActionResult> Add(CategoryViewModel objModel)
         {
             if (ModelState.IsValid)
             {
-                await tagrepo.AddAsync(objModel.TagInfo);
+                await categoryrepo.AddAsync(objModel.CategoryModel);
             }
             return RedirectToAction("Index");
         }
@@ -38,11 +36,11 @@ namespace BlogWeb.API.Controllers
         {
             using var transaction = await dbcon.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
             searchterm = string.IsNullOrEmpty(searchterm) ? "" : searchterm.ToLower();
-            TagListViewModel ObjModel = new();
+            CategoryListViewModel ObjModel = new();
+            ObjModel.CategoryList = new();
             ObjModel.NameSortOrder = string.IsNullOrEmpty(orderBy) ? "name_desc" : "";
 
-            var IndexList = dbcon.Tags.Where(_ => _.IsActive == true
-                        && _.Name.ToLower().Contains(searchterm) || searchterm == null);
+            var IndexList = dbcon.Categorys.Include(_ => _.Tags).Where(_ => _.Name.ToLower().Contains(searchterm) || searchterm == null);
 
             switch (orderBy)
             {
@@ -57,8 +55,16 @@ namespace BlogWeb.API.Controllers
             int PageSize = 5;
             int TotalPages = (int)Math.Ceiling((double)TotalRecords / PageSize);
             IndexList = IndexList.Skip((CurrentPage - 1) * PageSize).Take(PageSize);
-
-            ObjModel.TagList = IndexList;
+            if (IndexList.Any())
+            {
+                foreach (var Item in IndexList)
+                {
+                    CategoryInfo newModel = new();
+                    newModel.CategoryModel = Item;
+                    newModel.TagsCount = Item.Tags.Count();
+                    ObjModel.CategoryList.Add(newModel);
+                }
+            }
             ObjModel.CurrentPage = CurrentPage;
             ObjModel.TotalPage = TotalPages;
             ObjModel.PageSize = PageSize;
@@ -71,32 +77,27 @@ namespace BlogWeb.API.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(Guid id)
         {
-            TagViewModel objModel = new();
-            var result = await tagrepo.GetAsync(id);
+            CategoryViewModel objModel = new();
+            var result = await categoryrepo.GetAsync(id);
             if (result != null)
             {
-                objModel.TagInfo = result;
-                ViewData["CategoryId"] = new SelectList(dbcon.Categorys, "Id", "Name");
+                objModel.CategoryModel = result;
                 return View(objModel);
             }
             return View(null);
         }
         [HttpPost]
-        public async Task<IActionResult> Edit(TagViewModel objModel)
+        public async Task<IActionResult> Edit(CategoryViewModel objModel)
         {
-            var result = await tagrepo.EditAsync(objModel.TagInfo);
+            var result = await categoryrepo.EditAsync(objModel.CategoryModel);
             if (result != null)
-            {
-                ViewData["CategoryId"] = new SelectList(dbcon.Categorys, "Id", "Name");
                 return RedirectToAction("Index");
-            }
-            ViewData["CategoryId"] = new SelectList(dbcon.Categorys, "Id", "Name");
-            return RedirectToAction("Edit", new { id = objModel.TagInfo.Id });
+            return RedirectToAction("Edit", new { id = objModel.CategoryModel.Id });
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid Id)
         {
-            var result = await tagrepo.DeleteAsync(Id);
+            var result = await categoryrepo.DeleteAsync(Id);
             if (result != null)
                 return RedirectToAction("Index");
             return RedirectToAction("Edit", new { id = Id });

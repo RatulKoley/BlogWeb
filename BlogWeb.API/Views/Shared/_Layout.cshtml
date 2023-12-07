@@ -33,6 +33,15 @@
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Development</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Technology</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Miscellaneous</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">About</a>
                         </li>
                         @if (signinManager.IsSignedIn(User) 
@@ -43,6 +52,7 @@
                                     Admin Menu
                                 </a>
                                 <ul class="dropdown-menu">
+                                    <li><a style="font-weight:500;" class="dropdown-item" asp-area="" asp-controller="AdminCategory" asp-action="Index">Category Management</a></li>
                                     <li><a style="font-weight:500;" class="dropdown-item" asp-area="" asp-controller="AdminTags" asp-action="Index">Tags Management</a></li>
                                     <li><a style="font-weight:500;" class="dropdown-item" asp-area="" asp-controller="AdminBlogPosts" asp-action="List">Blog Management</a></li>
                                     <li><a style="font-weight:500;" class="dropdown-item" asp-area="" asp-controller="Account" asp-action="UserList">User Management</a></li>
@@ -50,31 +60,31 @@
                             </li>
                         }
                     </ul>
-                    @if (signinManager.IsSignedIn(User))
-                    {
-                        <li class="nav-item dropdown" style="list-style: none; display: inline-block; margin-right: 10px;">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: #fff;">
-                                @User?.Identity?.Name
-                            </a>
-                            <ul class="dropdown-menu" style="min-width: 100px;">
-                                <li><a class="dropdown-item" asp-route-username="@User?.Identity?.Name" asp-area="" asp-controller="Account" asp-action="EditByName" style="text-decoration: none; font-weight:500; color: #000;">Account</a></li>
-                                <li><a class="dropdown-item" asp-route-username="@User?.Identity?.Name" asp-area="" asp-controller="Account" asp-action="ChangePassword" style="text-decoration: none;font-weight:500; color: #000;">Change Password</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout" style="text-decoration: none; font-weight:500; color: #000;">Logout <i class="fa fa-power-off"></i></a></li>
-                            </ul>
-                        </li>
-                    }
-                    else
-                    {
-                        <li class="nav-item dropdown" style="list-style: none; display: inline-block; margin-right: 10px;">
-                            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: #fff;">
-                                Sign-In/Up
-                            </a>
-                            <ul class="dropdown-menu" style="min-width: 100px;">
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register" style="text-decoration: none;font-weight:500; color: #000;">Register</a></li>
-                                <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login" style="text-decoration: none;font-weight:500; color: #000;">Login</a></li>
-                            </ul>
-                        </li>
-                    }
+                        @if (signinManager.IsSignedIn(User))
+                        {
+                            <li class="nav-item dropdown" style="list-style: none; display: inline-block; margin-right: 10px;">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: #fff;">
+                                    @User?.Identity?.Name
+                                </a>
+                                <ul class="dropdown-menu" style="min-width: 100px;">
+                                    <li><a class="dropdown-item" asp-route-username="@User?.Identity?.Name" asp-area="" asp-controller="Account" asp-action="EditByName" style="text-decoration: none; font-weight:500; color: #000;">Account</a></li>
+                                    <li><a class="dropdown-item" asp-route-username="@User?.Identity?.Name" asp-area="" asp-controller="Account" asp-action="ChangePassword" style="text-decoration: none;font-weight:500; color: #000;">Change Password</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Logout" style="text-decoration: none; font-weight:500; color: #000;">Logout <i class="fa fa-power-off"></i></a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item dropdown" style="list-style: none; display: inline-block; margin-right: 10px;">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none; color: #fff;">
+                                    Sign-In/Up
+                                </a>
+                                <ul class="dropdown-menu" style="min-width: 100px;">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Register" style="text-decoration: none;font-weight:500; color: #000;">Register</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="Login" style="text-decoration: none;font-weight:500; color: #000;">Login</a></li>
+                                </ul>
+                            </li>
+                        }
                     <form class="d-flex" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
@@ -91,7 +101,7 @@
     </div>
 
     <footer style="text-align: center; color:black">
-        <hr style="width: 100%; border-top: 2px solid #black; margin-top: 10px;" />
+        <hr style="width: 100%; border-top: 2px solid black; margin-top: 10px;" />
         <div class="container">
             <div class="social-links" style="margin-bottom:10px; font-size:25px;">
             <a style="color: #1F1F1F; text-decoration: none; margin: 0 10px;" href="https://github.com/RatulKoley"><i class='bx bxl-github'></i></a>
